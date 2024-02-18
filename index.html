@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <title>Exercício do Pássaro</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script>
+
+        var config = { // define e especifica as configurações do jogo
+            type: Phaser.AUTO, // tipo de configuração utilizada 
+            width: 800, // define a largura da área do jogo 
+            height: 600, // define a altura da área do jogo
+
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
+
+        var game = new Phaser.Game(config); 
+
+        var passarinho;
+
+        function preload() { // carrega os arquivos na máquina que serão utilizados na cena do jogo, como imagens e sons
+            this.load.image('fundo', 'assets/fundopass.png'); // carrega a imagem de fundo do jogo
+            this.load.spritesheet('pass', 'assets/roxopass.png', { // carrega o spritesheet do passarinho 
+                frameWidth: 75, // largura do frame
+                frameHeight: 75 // altura do frame 
+            }); 
+        }
+
+        function create() { // adiciona os elementos dentro do jogo e configura cada um deles
+            this.add.image(400, 300, 'fundo').setScale(1.2); // adiciona a imagem de fundo no jogo e identifica a posição e escala de onde ficará na tela.
+            passarinho = this.add.sprite(100, 300, 'pass').setScale(1.3); // adiciona o spritesheet no jogo e configura seu tamanho e posição na tela.
+
+            this.anims.create({ // cria a animação para o sprite
+                key: 'fly', // nome da animação 
+                frames: this.anims.generateFrameNumbers('pass', { start: 0, end: 7 }), // determina os frames que serão utilizados na animação, começando no 0 e terminando no 7
+                frameRate: 10, // define a velocidade da animação em segundos
+                repeat: -1 // define que a animação será um loop contínuo (nunca para)
+            });
+
+            passarinho.anims.play('fly', true); // da início à animação
+
+
+        }
+
+        function update() { // função chamada diversas vezes para atualizar o estado do jogo
+
+            if (passarinho.x === 100 && passarinho.y === 300) { // verifica se a localização do sprite está nas coordenadas menciondas
+          passarinho.setFlip(false, false); // se a condição 'if'acima for verdadeira, aciona o comando setFlip para que o sprite não vire nem horizontalmente nem verticalmente
+            passarinho.ida = true; // define a ida do sprite como verdadeira
+            
+        }
+
+        if (passarinho.x < 700 && passarinho.ida === true) {  // verifica se a posição horizontal do sprite é menor que 700 e que a ida é verdadeira 
+            console.log ('o passarinho se movimenta na horizontal até atingir a coordenada x = 700')
+            passarinho.x += 5; // se o comando 'if' acima for verdadeiro, o passarinho se move de 5 em 5 unidades
+            
+        }
+
+        if (passarinho.x === 700) { // verifica se a posição do sprite é exatamente 700 no eixo x (horizontal)
+          passarinho.setFlip(true, false); // se a condição 'if' acima for verdadeira, esse comando vira o sprite horizontalmente para a esquerda
+            passarinho.virar = true; // comando que inicia o movimento do passarinho para baixo
+            
+        
+        }
+
+        if (passarinho.y < 500 && passarinho.virar === true) { // verifica se a localização do passarinho é menor que 500 e se ele virou horizontalmente
+            passarinho.y += 5; // se a condição 'if''acima for verdadeira, o passarinho se move para baixo de 5 em 5 unidades
+           
+
+        }
+
+        if (passarinho.y === 500){  // verifica se a coordenada y do sprite é exatamente 500
+          passarinho.virar = false; // se a condição 'if' acima for verdadeira, o comando de movimento para baixo será interrompido 
+          passarinho.ida = false; // se a condição 'if' acima for verdadeira, o movimento de ida (para direita) do sprite será interrompida 
+
+        }
+
+        if (passarinho.x > 100 && passarinho.ida === false){ // verifica se a coordenada x do sprite é menor que 100 e se o comando ida é falso
+            console.log ('o passarinho volta para a coordenada x = 100')
+          passarinho.x -=5; // se a condição 'if' acima for verdadeiro, o passarinho vai se movimentar de 5 em 5 para a esquerda, voltando
+        }
+
+        if (passarinho.x === 100 && passarinho.y > 100 && passarinho.virar === false){  // verifica se a coordenada x do sprite é igual a 100 e se a coordenada y é maior que 100 e se a propriedade virar é falsa
+            console.log('o que acontece')
+          passarinho.setFlip(false, false); // se a condição 'if' acima for verdadeira, o comando setFlip desvira o sprite na horizontal
+          passarinho.y -=5; // faz com que o passarinho mova para cima
+        }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
